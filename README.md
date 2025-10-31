@@ -88,7 +88,9 @@ Content-Type: application/json
 {
   "success": true,
   "message": "Email sent successfully",
-  "destination": "personal"
+  "data": {
+    "destination": "personal"
+  }
 }
 ```
 
@@ -97,9 +99,17 @@ Content-Type: application/json
 ```json
 {
   "success": false,
-  "error": "Error message description"
+  "message": "Error message description",
+  "data": null
 }
 ```
+
+**Consistent Structure Benefits:**
+
+- Client only needs to check `success` boolean
+- `message` always contains human-readable feedback
+- `data` contains payload (object on success, null on error)
+- Same parsing logic for all responses
 
 -----
 
