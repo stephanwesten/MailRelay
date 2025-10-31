@@ -2,11 +2,11 @@
 Email relay with web form and API. Toggle between personal/work addresses, built with Cloudflare Workers + MailChannels
 
 
-# MailRally - Project Specifications
+# Project Specifications
 
 ## Overview
 
-MailRally is an email relay service built on Cloudflare Workers using MailChannels. It provides both a web interface and REST API for sending emails to pre-configured personal and work addresses.
+MailRelay is an email relay service built on Cloudflare Workers using MailChannels. It provides both a web interface and REST API for sending emails to pre-configured personal and work addresses.
 
 -----
 
@@ -109,24 +109,26 @@ Content-Type: application/json
 
 ```
 ┌─────────────────────────────────────┐
-│          MailRally 📧               │
+│          MailRelay 📧               │
 ├─────────────────────────────────────┤
 │                                     │
 │  Send To:  ( ) Personal  ( ) Work   │
 │                                     │
 │  Subject:  [________________]       │
 │                                     │
-│  Message:  ┌──────────────────┐    │
-│            │                  │    │
-│            │                  │    │
-│            │                  │    │
-│            └──────────────────┘    │
+│  Message:  ┌──────────────────┐     │
+│            │                  │     │
+│            │                  │     │
+│            │                  │     │
+│            └──────────────────┘     │
 │                                     │
 │            [  Send Email  ]         │
 │                                     │
 └─────────────────────────────────────┘
 ```
 
+Error feedback is crucial. log all information and print all information except for sensitive information like keys to make debugging easier. 
+In the API return in the response an error message with as much information as possible. 
 -----
 
 ## Security Considerations
@@ -161,21 +163,15 @@ Content-Type: application/json
 
 ## Future Enhancements (Optional)
 
-- Email templates
-- Multiple recipient support
-- Attachment support
-- Email history/logging
-- Dark mode toggle
-- Markdown support in messages
+- llm integration to enhance the subject and description in case of typos. 
 
 -----
 
 **Questions to finalize:**
 
-1. Do you want TypeScript or JavaScript?
-1. Any specific styling preferences (minimal, modern, colorful)?
-1. Should the form have validation (required fields, max length)?
-1. Do you want email confirmation/receipts?
-1. Rate limiting: how many emails per hour/day?
+1. Do you want TypeScript or JavaScript?  depends, typescript requires compilation, but is type safe. depends on github actions. 
+1. Any specific styling preferences (minimal, modern, colorful)? minimal but modern. 
+1. Should the form have validation (required fields, max length)?  Title is required. 
+1. Do you want email confirmation/receipts? no
+1. Rate limiting: how many emails per hour/day? 5
 
-What would you like to refine or add?​​​​​​​​​​​​​​​​
