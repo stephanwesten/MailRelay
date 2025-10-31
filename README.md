@@ -14,8 +14,9 @@ MailRelay is an email relay service built on Cloudflare Workers using MailChanne
 
 ### 1. Web Form Interface
 
+- **Pincode Authentication**: Optional URL parameter (`?pincode=xxx`) for bookmarking. If not provided, displays pincode input field
 - **Address Toggle**: Switch between personal and work email addresses
-- **Subject Field**: Text input for email subject line
+- **Subject Field**: Text input for email subject line (required)
 - **Message Field**: Textarea for email body/description
 - **Submit Button**: Send email via form submission
 - **Success/Error Feedback**: Visual confirmation of email delivery status
@@ -23,7 +24,7 @@ MailRelay is an email relay service built on Cloudflare Workers using MailChanne
 ### 2. REST API
 
 - **POST Endpoint**: `/api/send` for programmatic email sending
-- **Authentication**: API key/token for secure access
+- **Authentication**: Pincode in request body for simple authentication
 - **JSON Payload**: Accepts structured email data
 - **Response Codes**: Standard HTTP status codes with error messages
 
@@ -54,9 +55,9 @@ MailRelay is an email relay service built on Cloudflare Workers using MailChanne
 PERSONAL_EMAIL=your-personal@example.com
 WORK_EMAIL=your-work@example.com
 MAILCHANNELS_API_KEY=xxx
-API_AUTH_TOKEN=xxx (for API endpoint security)
+PINCODE=your-secret-pincode
 FROM_EMAIL=noreply@yourdomain.com
-FROM_NAME=MailRally
+FROM_NAME=MailRelay
 ```
 
 -----
@@ -68,7 +69,6 @@ FROM_NAME=MailRally
 **Headers:**
 
 ```
-Authorization: Bearer {API_AUTH_TOKEN}
 Content-Type: application/json
 ```
 
@@ -76,6 +76,7 @@ Content-Type: application/json
 
 ```json
 {
+  "pincode": "string",
   "destination": "personal" | "work",
   "subject": "string",
   "message": "string"
@@ -122,6 +123,9 @@ Content-Type: application/json
 │          MailRelay 📧               │
 ├─────────────────────────────────────┤
 │                                     │
+│  Pincode:  [________________]       │
+│            (hidden if in URL)       │
+│                                     │
 │  Send To:  ( ) Personal  ( ) Work   │
 │                                     │
 │  Subject:  [________________]       │
@@ -137,17 +141,22 @@ Content-Type: application/json
 └─────────────────────────────────────┘
 ```
 
+**Pincode URL Parameter**: Users can bookmark `/?pincode=xxx` to skip entering pincode each time.
+
 Error feedback is crucial. log all information and print all information except for sensitive information like keys to make debugging easier. 
 In the API return in the response an error message with as much information as possible. 
 -----
 
 ## Security Considerations
 
-- API authentication via Bearer token
-- Rate limiting to prevent abuse
-- Input validation and sanitization
-- CORS configuration for API access
-- Environment variables for sensitive data (never in code)
+- **Simple Pincode Authentication**: Pincode compared against `PINCODE` environment variable
+  - Can be passed as URL parameter `?pincode=xxx` for web form bookmarking
+  - Required in API request body
+  - Not highly secure, but sufficient for personal use MVP
+- **Input Validation**: Validate and sanitize all user inputs
+- **CORS Configuration**: Configure appropriate CORS headers for API access
+- **Environment Variables**: Store all sensitive data (emails, pincode, API keys) in environment variables, never in code
+- **No Rate Limiting**: Intentionally omitted for MVP simplicity (add later if needed)
 
 -----
 
@@ -179,9 +188,8 @@ In the API return in the response an error message with as much information as p
 
 **Questions to finalize:**
 
-1. Do you want TypeScript or JavaScript?  depends, typescript requires compilation, but is type safe. depends on github actions. 
-1. Any specific styling preferences (minimal, modern, colorful)? minimal but modern. 
-1. Should the form have validation (required fields, max length)?  Title is required. 
+1. Do you want TypeScript or JavaScript?  depends, typescript requires compilation, but is type safe. depends on github actions.
+1. Any specific styling preferences (minimal, modern, colorful)? minimal but modern.
+1. Should the form have validation (required fields, max length)?  Subject is required.
 1. Do you want email confirmation/receipts? no
-1. Rate limiting: how many emails per hour/day? 5
 
