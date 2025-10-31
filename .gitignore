@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Wrangler
+.wrangler/
+.dev.vars
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment variables (local development only)
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
